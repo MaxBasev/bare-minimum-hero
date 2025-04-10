@@ -16,6 +16,22 @@ A minimalist Chrome extension that lets users mark micro-achievements for the da
 - Daily reminder (which you can ignore)
 - No intrusive gamification or guilt
 
+## 🔥 Streak Mode
+
+Every time you show up and click, we remember.  
+Not in a creepy way — in a "we love patterns" way.
+
+- 🧠 3-Day Streak: “Consistently Mediocre”
+- 💪 7-Day Streak: “Resilient Waffle”
+- 🧃 14-Day Streak: “Certified Non-Quitter”
+- ☕️ 30-Day Streak: “Burnout? Never Heard Of Her”
+- 😎 69 Days: “Nice. That’s Commitment.”
+
+Streak Mode exists to make you care just enough not to skip tomorrow.
+
+Because who needs a screaming owl when you have a tired star silently respecting your effort?
+
+
 ## 🔧 Installation
 
 1. Download or clone this repository
