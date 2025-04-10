@@ -68,6 +68,17 @@ Long, dramatic, over-the-top praise for when you absolutely need to feel like a 
 
 ---
 
+#### `mystery-bonus.js`  
+🎁 **Random Reward Surprises**  
+Unexpected digital gifts that appear when you least expect them.  
+They do nothing. They mean nothing. They just exist to make you smile.
+
+> Example:  
+> "🧠 Brain Cell Backup — For when the last one quits"  
+> "🔮 Crystal Ball of 'Maybe Tomorrow' — Shows you 24 hours of continued existence"
+
+---
+
 This app doesn't just store strings.  
 It stores **hope, sarcasm, and deeply personal coping mechanisms.**  
 **Use with caution. Or not. You do you.**
@@ -87,6 +98,19 @@ Streak Mode exists to make you care just enough not to skip tomorrow.
 
 Because who needs a screaming owl when you have a tired star silently respecting your effort?
 
+## 🎁 Mystery Bonuses
+
+Sometimes (rarely, unpredictably), you'll trigger a Barely Legendary Bonus.  
+These make no difference. They change nothing.  
+They're just a small unexpected joy, like finding a forgotten cookie in your pocket.
+
+Examples:
+- 🥯 Emotional Bagel — Nourishment for your digital soul
+- 🧸 Emotional Support Pixel — It's watching over your screen  
+- 🧶 Digital Comfort Yarn — Knitted from the finest validation strings
+
+These don't improve your life in any tangible way.  
+But then again, neither does doom-scrolling, and you still do that.
 
 ## 🔧 Installation
 

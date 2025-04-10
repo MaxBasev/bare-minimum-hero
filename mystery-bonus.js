@@ -1,0 +1,28 @@
+// Mystery bonus rewards - fun little surprises that appear randomly
+export const mysteryBonuses = [
+	"🥯 Emotional Bagel — Nourishment for your digital soul",
+	"🌮 Tactical Taco — +5 to emotional resilience, -2 to productivity",
+	"🧸 Emotional Support Pixel — It's watching over your screen",
+	"🧩 Puzzle Piece — Congratulations, you're 0.001% closer to figuring life out",
+	"🪴 Low-Maintenance Plant — This one you can't kill with neglect",
+	"🧠 Brain Cell Backup — For when the last one quits",
+	"🥇 Imposter Syndrome Badge — You earned it (or did you?)",
+	"🧶 Digital Comfort Yarn — Knitted from the finest validation strings",
+	"⭐ Star of Adequacy — Brilliantly average, just like today",
+	"🧊 Ice Cube of Chill — Apply to overheated expectations",
+	"🪄 Wand of Minor Task Completion — You're basically a wizard now",
+	"🧪 Potion of 'Good Enough' — Effects: temporary satisfaction",
+	"🔋 Emergency Battery — 5% more energy than you had before",
+	"🎭 Mask of 'I'm Fine' — High-grade, premium quality",
+	"📌 Pin of Remembering — For pinning down that thought you just lost",
+	"🧣 Scarf of Mild Comfort — Digital warmth for cold reality",
+	"🧿 Evil Eye Blocker — Protects from judgy coworkers",
+	"🎲 Dice of Destiny — All outcomes are 'meh' and that's okay",
+	"🧙‍♂️ Minimal Effort Spell Book — Chapter 1: How to pretend you're reading emails",
+	"🧼 Soap of Digital Cleanse — Doesn't actually clean anything",
+	"🧁 Cupcake of Minor Joy — Contains .zip file of endorphins",
+	"☕ Cup of Lukewarm Ambition — Not hot, not cold, just... present",
+	"🔮 Crystal Ball of 'Maybe Tomorrow' — Shows you 24 hours of continued existence",
+	"🧯 Fire Extinguisher for Small Emergencies — Like deadline emails",
+	"💎 Gem of 'Almost Valuable' — Worth exactly one self-compliment"
+]; 

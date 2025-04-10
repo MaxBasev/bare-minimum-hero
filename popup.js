@@ -11,6 +11,7 @@ import {
 	streakMessages,
 	streakRecoveryMessages
 } from './streak-quotes.js';
+import { mysteryBonuses } from './mystery-bonus.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
 	// Get DOM elements
@@ -37,6 +38,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 	const nextAchievement = document.getElementById('next-achievement');
 	const streakMessage = document.getElementById('streak-message');
 
+	// Mystery bonus elements
+	const mysteryBonusContainer = document.getElementById('mystery-bonus-container');
+	const bonusReward = document.getElementById('bonus-reward');
+
 	// Display current date
 	const today = new Date();
 	const options = { weekday: 'long', day: 'numeric', month: 'long' };
@@ -56,7 +61,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 		lastStreakDate = '',
 		highestStreak = 0,
 		lastAchievement = '',
-		streakBroken = false
+		streakBroken = false,
+		lastBonusDate = ''
 	} = await chrome.storage.local.get([
 		'lastClickDate',
 		'heroPoints',
@@ -67,7 +73,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 		'lastStreakDate',
 		'highestStreak',
 		'lastAchievement',
-		'streakBroken'
+		'streakBroken',
+		'lastBonusDate'
 	]);
 
 	// Update points counter
@@ -154,6 +161,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 		// Animate hero badge
 		heroBadge.classList.add('celebrate');
+
+		// Check for random mystery bonus
+		const gotBonus = checkMysteryBonus(lastBonusDate);
 
 		// Display quote and hide question with delay for better animation
 		setTimeout(() => {
@@ -405,14 +415,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 	}
 
 	// Create confetti effect
-	function createConfetti(count = 30, emergency = false) {
+	function createConfetti(count = 30, emergency = false, bonus = false) {
 		const confettiContainer = document.createElement('div');
 		confettiContainer.className = 'confetti-container';
 		document.body.appendChild(confettiContainer);
 
 		const colors = emergency
 			? ['#e7906b', '#f6c177', '#7aa2f7', '#bb9af7', '#fff']
-			: ['#7ca5bd', '#ddc199', '#e8dfca', '#5d7b93', '#fff'];
+			: bonus
+				? ['#ffcb6b', '#ffae33', '#ffd700', '#ffe863', '#fff9c4']
+				: ['#7ca5bd', '#ddc199', '#e8dfca', '#5d7b93', '#fff'];
 
 		for (let i = 0; i < count; i++) {
 			const confetti = document.createElement('div');
@@ -422,6 +434,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 			confetti.style.height = (Math.random() * 8 + 5) + 'px';
 			confetti.style.animationDelay = Math.random() * 3 + 's';
 			confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+			// For bonus confetti, add some special shapes
+			if (bonus && Math.random() > 0.7) {
+				const shapes = ['✨', '🎉', '🎁', '🎊', '💫', '⭐'];
+				confetti.innerHTML = shapes[Math.floor(Math.random() * shapes.length)];
+				confetti.style.fontSize = (Math.random() * 12 + 8) + 'px';
+				confetti.style.backgroundColor = 'transparent';
+				confetti.style.width = 'auto';
+				confetti.style.height = 'auto';
+			}
 
 			confettiContainer.appendChild(confetti);
 		}
@@ -510,5 +532,57 @@ document.addEventListener('DOMContentLoaded', async () => {
 			newIndex = Math.floor(Math.random() * barelyUsefulTips.length);
 		} while (newIndex === lastTipIndex && barelyUsefulTips.length > 1);
 		return newIndex;
+	}
+
+	// Check for random mystery bonus
+	function checkMysteryBonus(lastBonusDate) {
+		// Mystery bonus should be rare - 15% chance per click
+		const bonusChance = 0.15;
+
+		// Don't show bonus too often - at least 3 days between bonuses
+		const minDaysBetweenBonuses = 3;
+
+		// Check if enough days have passed since last bonus
+		let daysSinceLastBonus = Infinity;
+		if (lastBonusDate) {
+			const lastBonus = new Date(lastBonusDate);
+			const today = new Date();
+			daysSinceLastBonus = Math.floor((today - lastBonus) / (1000 * 60 * 60 * 24));
+		}
+
+		// Only proceed if enough days have passed
+		if (daysSinceLastBonus >= minDaysBetweenBonuses) {
+			// Random roll for bonus
+			const roll = Math.random();
+			if (roll <= bonusChance) {
+				// Got a bonus!
+				const randomBonus = mysteryBonuses[Math.floor(Math.random() * mysteryBonuses.length)];
+
+				// Update the bonus display
+				bonusReward.textContent = `Reward: ${randomBonus}`;
+
+				// Show the bonus with a small delay for dramatic effect
+				setTimeout(() => {
+					mysteryBonusContainer.classList.remove('hidden');
+
+					// Create special bonus confetti
+					createConfetti(20, false, true);
+
+					// Auto-hide bonus after some time
+					setTimeout(() => {
+						mysteryBonusContainer.classList.add('hidden');
+					}, 8000);
+				}, 1500);
+
+				// Save the date of this bonus
+				chrome.storage.local.set({
+					lastBonusDate: new Date().toISOString().split('T')[0]
+				});
+
+				return true;
+			}
+		}
+
+		return false;
 	}
 }); 
