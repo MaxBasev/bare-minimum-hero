@@ -172,6 +172,39 @@ const emergencyAchievements = [
 	"🎭 New Role: Master of Pretending Things Are Fine (and Pulling It Off)"
 ];
 
+// Streak achievements
+const streakAchievements = [
+	{ days: 3, label: "🥉 Consistently Mediocre" },
+	{ days: 7, label: "🥈 Resilient Waffle" },
+	{ days: 14, label: "🥇 Certified Non-Quitter" },
+	{ days: 21, label: "🔒 Unstoppably Average" },
+	{ days: 30, label: "🏆 Burnout? Never Heard Of Her" },
+	{ days: 50, label: "🧠 Emotionally Durable Legend" },
+	{ days: 69, label: "😎 Nice. That's Commitment." },
+	{ days: 100, label: "🚀 Minimal Effort, Maximum Tenacity" }
+];
+
+// Streak encouragement messages
+const streakMessages = [
+	"Don't break the streak. The sad star believes in you.",
+	"This isn't Duolingo. But we'll judge you too.",
+	"Streaks don't make heroes. But they make dopamine, and that's close enough.",
+	"Imagine breaking a streak like this. Couldn't be you. Right?",
+	"You've come this far. May as well keep going. Just saying.",
+	"The streak sustains itself at this point. You're just along for the ride.",
+	"Not to be dramatic, but this streak is the only stable thing in your life right now.",
+	"Skipping a day is fine. If you're fine with starting over. Just a thought."
+];
+
+// Streak recovery messages
+const streakRecoveryMessages = [
+	"It happens. Even supernovas collapse. You're still here. Try again tomorrow.",
+	"Streaks end. Legends continue. You'll bounce back.",
+	"The universe needed to test your resilience. Hello, test subject.",
+	"Every hero's journey includes a setback in act two. This is yours.",
+	"Failure is just dramatic character development. You're the main character today."
+];
+
 document.addEventListener('DOMContentLoaded', async () => {
 	// Get DOM elements
 	const dateDisplay = document.getElementById('date-display');
@@ -190,6 +223,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 	const tipText = document.getElementById('tip-text');
 	const refreshTip = document.getElementById('refresh-tip');
 
+	// Streak related elements
+	const streakCount = document.getElementById('streak-count');
+	const streakDays = document.getElementById('streak-days');
+	const currentAchievement = document.getElementById('current-achievement');
+	const nextAchievement = document.getElementById('next-achievement');
+	const streakMessage = document.getElementById('streak-message');
+
 	// Display current date
 	const today = new Date();
 	const options = { weekday: 'long', day: 'numeric', month: 'long' };
@@ -199,8 +239,29 @@ document.addEventListener('DOMContentLoaded', async () => {
 	const dateString = today.toISOString().split('T')[0];
 
 	// Load data from local storage
-	const { lastClickDate, heroPoints = 0, lastQuote = '', lastEmergencyDate = '', lastTipIndex = -1 } =
-		await chrome.storage.local.get(['lastClickDate', 'heroPoints', 'lastQuote', 'lastEmergencyDate', 'lastTipIndex']);
+	const {
+		lastClickDate,
+		heroPoints = 0,
+		lastQuote = '',
+		lastEmergencyDate = '',
+		lastTipIndex = -1,
+		currentStreak = 0,
+		lastStreakDate = '',
+		highestStreak = 0,
+		lastAchievement = '',
+		streakBroken = false
+	} = await chrome.storage.local.get([
+		'lastClickDate',
+		'heroPoints',
+		'lastQuote',
+		'lastEmergencyDate',
+		'lastTipIndex',
+		'currentStreak',
+		'lastStreakDate',
+		'highestStreak',
+		'lastAchievement',
+		'streakBroken'
+	]);
 
 	// Update points counter
 	pointsCount.textContent = heroPoints;
@@ -208,6 +269,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 	// Display a random tip
 	displayRandomTip(lastTipIndex);
+
+	// Update streak display
+	updateStreakDisplay(currentStreak);
+
+	// Check if streak is in recovery mode
+	if (streakBroken) {
+		displayStreakRecoveryMessage();
+	} else {
+		displayRandomStreakMessage(currentStreak);
+	}
 
 	// Add tip refresh button handler
 	refreshTip.addEventListener('click', () => {
@@ -235,6 +306,36 @@ document.addEventListener('DOMContentLoaded', async () => {
 		// Increase points counter
 		const newPoints = heroPoints + 1;
 
+		// Calculate new streak
+		let newStreak = currentStreak;
+		let streakAchieved = false;
+		let achievementUnlocked = null;
+
+		// Check if there was a streak break (more than 1 day passed since last click)
+		const yesterday = new Date(today);
+		yesterday.setDate(yesterday.getDate() - 1);
+		const yesterdayString = yesterday.toISOString().split('T')[0];
+
+		if (!lastClickDate || lastClickDate === yesterdayString) {
+			// Continuing or starting a streak
+			newStreak = currentStreak + 1;
+
+			// Check if a new achievement was reached
+			for (const achievement of streakAchievements) {
+				if (newStreak === achievement.days) {
+					streakAchieved = true;
+					achievementUnlocked = achievement;
+					break;
+				}
+			}
+		} else if (lastClickDate !== dateString) {
+			// Streak was broken (more than 1 day passed)
+			newStreak = 1;
+		}
+
+		// Update highest streak if needed
+		const newHighestStreak = Math.max(highestStreak, newStreak);
+
 		// Get random quote
 		const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 
@@ -257,6 +358,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 			animatePointsCounter(heroPoints, newPoints);
 			updatePointComment(newPoints);
 
+			// Update streak counter
+			animateStreakCounter(currentStreak, newStreak);
+			updateStreakDisplay(newStreak);
+
+			// Show streak achievement if unlocked
+			if (streakAchieved && achievementUnlocked) {
+				showStreakAchievement(achievementUnlocked);
+			}
+
 			// Disable button
 			barelyButton.disabled = true;
 		}, 600);
@@ -265,8 +375,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 		await chrome.storage.local.set({
 			lastClickDate: dateString,
 			heroPoints: newPoints,
-			lastQuote: randomQuote
+			lastQuote: randomQuote,
+			currentStreak: newStreak,
+			lastStreakDate: dateString,
+			highestStreak: newHighestStreak,
+			lastAchievement: achievementUnlocked ? achievementUnlocked.label : lastAchievement,
+			streakBroken: false
 		});
+
+		// Update streak message
+		displayRandomStreakMessage(newStreak);
 	});
 
 	// Emergency button click handler
@@ -305,6 +423,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 		if (e.target.closest('#emergency-container')) {
 			emergencyContainer.classList.add('hidden');
 		}
+
+		// Close streak achievement banner
+		if (e.target.closest('.streak-banner')) {
+			document.querySelector('.streak-banner')?.remove();
+		}
 	});
 
 	// Add badge click handler for About display
@@ -318,6 +441,142 @@ document.addEventListener('DOMContentLoaded', async () => {
 	document.querySelector('.about-close')?.addEventListener('click', () => {
 		aboutContainer.classList.add('hidden');
 	});
+
+	// Function to check if streak needs resetting
+	async function checkStreakStatus() {
+		if (!lastClickDate || lastClickDate === dateString) return;
+
+		// Get the last click date
+		const lastClick = new Date(lastClickDate);
+
+		// Get yesterday date
+		const yesterday = new Date(today);
+		yesterday.setDate(yesterday.getDate() - 1);
+
+		// If last click was before yesterday, streak is broken
+		if (lastClick < yesterday && !streakBroken && currentStreak > 0) {
+			await chrome.storage.local.set({ streakBroken: true });
+			displayStreakRecoveryMessage();
+		}
+	}
+
+	// Check if streak was broken
+	checkStreakStatus();
+
+	// Animate streak counter
+	function animateStreakCounter(from, to) {
+		let current = from;
+		const increment = (to - from) > 0 ? 1 : -1;
+
+		streakCount.classList.add('updating');
+
+		const timer = setInterval(() => {
+			current += increment;
+			streakCount.textContent = current;
+			streakDays.textContent = current === 1 ? 'day' : 'days';
+
+			if (current === to) {
+				clearInterval(timer);
+				setTimeout(() => {
+					streakCount.classList.remove('updating');
+				}, 500);
+			}
+		}, 100);
+	}
+
+	// Show streak achievement banner
+	function showStreakAchievement(achievement) {
+		// Create streak banner
+		const streakBanner = document.createElement('div');
+		streakBanner.className = 'streak-banner';
+
+		// Banner content
+		streakBanner.innerHTML = `
+			<div class="streak-banner-title">🏆 New Title Unlocked:</div>
+			<div class="streak-banner-description">${achievement.label}</div>
+			<div class="streak-banner-subtitle">You showed up for ${achievement.days} days straight. That's more than your last relationship.</div>
+			<div class="close-streak-banner">Tap to close</div>
+		`;
+
+		// Add to body
+		document.body.appendChild(streakBanner);
+
+		// Auto remove after 10 seconds
+		setTimeout(() => {
+			streakBanner.remove();
+		}, 10000);
+	}
+
+	// Display random streak message
+	function displayRandomStreakMessage(streak) {
+		if (streak <= 0) {
+			streakMessage.textContent = '';
+			return;
+		}
+
+		const randomMessage = streakMessages[Math.floor(Math.random() * streakMessages.length)];
+		streakMessage.textContent = randomMessage;
+	}
+
+	// Display streak recovery message
+	function displayStreakRecoveryMessage() {
+		const randomMessage = streakRecoveryMessages[Math.floor(Math.random() * streakRecoveryMessages.length)];
+		streakMessage.textContent = randomMessage;
+		streakMessage.innerHTML += `<br><button id="reset-streak-btn">Reset Streak With Dignity 🧹</button>`;
+
+		// Add reset button handler
+		document.getElementById('reset-streak-btn')?.addEventListener('click', async () => {
+			await chrome.storage.local.set({
+				streakBroken: false,
+				currentStreak: 0
+			});
+
+			// Update UI
+			animateStreakCounter(parseInt(streakCount.textContent), 0);
+			updateStreakDisplay(0);
+			displayRandomStreakMessage(0);
+		});
+	}
+
+	// Update streak display
+	function updateStreakDisplay(streak) {
+		// Update streak counter
+		streakCount.textContent = streak;
+		streakDays.textContent = streak === 1 ? 'day' : 'days';
+
+		// Find current achievement
+		let currentAch = null;
+		for (let i = streakAchievements.length - 1; i >= 0; i--) {
+			if (streak >= streakAchievements[i].days) {
+				currentAch = streakAchievements[i];
+				break;
+			}
+		}
+
+		// Find next achievement
+		let nextAch = null;
+		for (let i = 0; i < streakAchievements.length; i++) {
+			if (streak < streakAchievements[i].days) {
+				nextAch = streakAchievements[i];
+				break;
+			}
+		}
+
+		// Update achievements display
+		if (currentAch) {
+			currentAchievement.textContent = `${currentAch.label} ✅`;
+			currentAchievement.classList.remove('hidden');
+		} else {
+			currentAchievement.classList.add('hidden');
+		}
+
+		if (nextAch) {
+			nextAchievement.textContent = `Next: ${nextAch.label} at ${nextAch.days} days`;
+			nextAchievement.classList.remove('hidden');
+		} else {
+			nextAchievement.textContent = `You've reached all achievements!`;
+		}
+	}
 
 	// Function to update points comment
 	function updatePointComment(points) {

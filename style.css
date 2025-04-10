@@ -367,77 +367,246 @@ button:disabled {
   z-index: -1;
 }
 
+/* Hero Points Styling */
 .hero-points {
   margin-top: 20px;
-  font-size: 14px;
-  color: #777;
-  background: rgba(255, 255, 255, 0.7);
-  padding: 10px 15px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
-  position: relative;
-}
-
-.hero-points:hover::after {
-  content: "Every point = one day you didn't fully fall apart";
-  position: absolute;
-  bottom: -40px;
-  left: 0;
-  width: 100%;
   text-align: center;
-  font-size: 12px;
-  background: rgba(93, 123, 147, 0.9);
-  color: white;
-  padding: 5px 8px;
-  border-radius: 5px;
-  z-index: 10;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
 }
 
 .points-wrapper {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: inline-block;
+  padding: 8px 15px;
+  background-color: rgba(93, 123, 147, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .points-label {
+  font-weight: 600;
+  color: #435c70;
   margin-right: 5px;
 }
 
 #points-count {
-  font-weight: 800;
-  color: #4a90e2;
-  margin: 0 5px;
-  position: relative;
-  transition: all 0.2s ease;
-  font-size: 18px;
+  font-weight: 700;
+  color: #5d7b93;
+  transition: transform 0.3s, color 0.3s;
 }
 
 #points-count.updating {
-  color: #6fcf97;
-  transform: scale(1.3);
-  text-shadow: 0 0 10px rgba(111, 207, 151, 0.5);
-}
-
-#points-count::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #4a90e2, transparent);
+  transform: scale(1.2);
+  color: #354a5f;
 }
 
 #point-comment {
-  font-style: italic;
   font-size: 12px;
-  color: #a0a0a0;
+  color: #86a5bc;
+  font-style: italic;
   margin-left: 5px;
+}
+
+/* Streak Container Styling */
+.streak-container {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 14px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.streak-wrapper {
+  padding: 10px 15px;
+  background-color: rgba(255, 143, 89, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  margin-bottom: 8px;
+}
+
+.streak-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.streak-flame {
+  margin-right: 5px;
+  font-size: 16px;
+}
+
+.streak-label {
+  font-weight: 600;
+  color: #d86e3a;
+  margin-right: 5px;
+}
+
+#streak-count {
+  font-weight: 700;
+  color: #ff8f59;
+  transition: transform 0.3s, color 0.3s;
+}
+
+#streak-count.updating {
+  transform: scale(1.2);
+  color: #ff7043;
+}
+
+#streak-days {
+  color: #d86e3a;
+  margin-left: 3px;
+}
+
+#streak-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 13px;
+}
+
+#current-achievement, #next-achievement {
+  padding: 4px 8px;
+  border-radius: 5px;
+}
+
+#current-achievement {
+  background-color: rgba(255, 143, 89, 0.15);
+  color: #d86e3a;
+}
+
+#next-achievement {
+  background-color: rgba(93, 123, 147, 0.1);
+  color: #5d7b93;
+}
+
+.streak-message {
+  font-style: italic;
+  color: #9da5ae;
+  font-size: 13px;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+#reset-streak-btn {
+  margin-top: 8px;
+  background-color: rgba(216, 110, 58, 0.1);
+  color: #d86e3a;
+  border: 1px solid rgba(216, 110, 58, 0.2);
+  border-radius: 5px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+#reset-streak-btn:hover {
+  background-color: rgba(216, 110, 58, 0.2);
+  transform: scale(1.03);
+}
+
+.streak-banner {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #ff8f59 0%, #d86e3a 100%);
+  color: white;
+  padding: 18px 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(216, 110, 58, 0.3);
+  text-align: center;
+  max-width: 280px;
+  z-index: 1000;
+  animation: bannerSlideIn 0.5s ease-out;
+}
+
+.streak-banner-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.streak-banner-description {
+  font-size: 13px;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.streak-banner-subtitle {
+  font-size: 12px;
+  margin: 8px 0;
+  opacity: 0.9;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+.close-streak-banner {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+@keyframes bannerSlideIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* Barely Useful Tips Styling */
+.barely-useful-tips {
+  margin-top: 20px;
+  background: linear-gradient(135deg, #f5f0ff 0%, #e9e1f5 100%);
+  padding: 12px 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-left: 3px solid #b09cd6;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.tips-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: #8e7bb6;
+  font-weight: 600;
+}
+
+#refresh-tip {
+  background: none;
+  border: none;
+  color: #8e7bb6;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 5px;
+  border-radius: 50%;
+  box-shadow: none;
+  transition: all 0.2s ease;
+}
+
+#refresh-tip:hover {
+  background-color: rgba(142, 123, 182, 0.1);
+  transform: rotate(45deg);
+}
+
+#tip-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #635f7a;
+  margin: 0;
+  font-weight: 600;
+  animation: tipFadeIn 0.4s ease-in-out;
+}
+
+@keyframes tipFadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .hidden {
@@ -600,56 +769,4 @@ button:disabled {
 
 .about-close:hover {
   background: rgba(255, 255, 255, 0.3);
-}
-
-/* Barely Useful Tips styles */
-.barely-useful-tips {
-  margin-top: 20px;
-  background: linear-gradient(135deg, #f5f0ff 0%, #e9e1f5 100%);
-  padding: 12px 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border-left: 3px solid #b09cd6;
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-.tips-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-  font-size: 12px;
-  color: #8e7bb6;
-  font-weight: 600;
-}
-
-#refresh-tip {
-  background: none;
-  border: none;
-  color: #8e7bb6;
-  font-size: 14px;
-  cursor: pointer;
-  padding: 2px 5px;
-  border-radius: 50%;
-  box-shadow: none;
-  transition: all 0.2s ease;
-}
-
-#refresh-tip:hover {
-  background-color: rgba(142, 123, 182, 0.1);
-  transform: rotate(45deg);
-}
-
-#tip-text {
-  font-size: 14px;
-  line-height: 1.5;
-  color: #635f7a;
-  margin: 0;
-  font-weight: 600;
-  animation: tipFadeIn 0.4s ease-in-out;
-}
-
-@keyframes tipFadeIn {
-  from { opacity: 0; transform: translateY(5px); }
-  to { opacity: 1; transform: translateY(0); }
 } 
