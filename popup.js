@@ -756,11 +756,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 				const footerStartY = quoteBoxY + quoteBoxHeight + 40;
 				const footerSpacing = 50;
 
+				// Get the caption based on current language
+				const caption = t.shareCaption;
+
 				// Draw caption directly (no star)
 				ctx.fillStyle = '#5d7b93';
 				ctx.font = 'bold 20px Nunito, sans-serif';
 				ctx.textAlign = 'center';
-				ctx.fillText('I did the bare minimum today.', width / 2, footerStartY);
+				ctx.fillText(caption, width / 2, footerStartY);
 
 				// Draw URL
 				ctx.fillStyle = '#8597a6';
@@ -786,7 +789,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 				// Reset button
 				downloadImageBtn.disabled = false;
-				downloadImageBtn.innerHTML = '<span class="download-icon">💾</span> Download Your Hero Moment';
+				downloadImageBtn.innerHTML = `<span class="download-icon">💾</span> ${t.downloadButton}`;
 
 				// Create confetti effect for successful download
 				createConfetti(15, false, false);
@@ -795,7 +798,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 				// Reset button on error
 				downloadImageBtn.disabled = false;
-				downloadImageBtn.innerHTML = '<span class="download-icon">💾</span> Try Again';
+				downloadImageBtn.innerHTML = `<span class="download-icon">💾</span> ${t.downloadButton}`;
 			}
 		};
 
@@ -849,11 +852,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 				const footerStartY = quoteBoxY + quoteBoxHeight + 40;
 				const footerSpacing = 50;
 
+				// Get the caption based on current language
+				const caption = t.shareCaption;
+
 				// Draw caption directly (no star)
 				ctx.fillStyle = '#5d7b93';
 				ctx.font = 'bold 20px Nunito, sans-serif';
 				ctx.textAlign = 'center';
-				ctx.fillText('I did the bare minimum today.', width / 2, footerStartY);
+				ctx.fillText(caption, width / 2, footerStartY);
 
 				// Draw URL
 				ctx.fillStyle = '#8597a6';
@@ -875,14 +881,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 				document.body.removeChild(downloadLink);
 
 				downloadImageBtn.disabled = false;
-				downloadImageBtn.innerHTML = '<span class="download-icon">💾</span> Download Your Hero Moment';
+				downloadImageBtn.innerHTML = `<span class="download-icon">💾</span> ${t.downloadButton}`;
 
 				createConfetti(15, false, false);
 			} catch (error) {
 				console.error('Error creating fallback image:', error);
 
 				downloadImageBtn.disabled = false;
-				downloadImageBtn.innerHTML = '<span class="download-icon">💾</span> Try Again';
+				downloadImageBtn.innerHTML = `<span class="download-icon">💾</span> ${t.downloadButton}`;
 			}
 		};
 	}

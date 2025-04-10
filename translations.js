@@ -12,6 +12,9 @@ export const translations = {
 		emergencyTooltip: 'Use this when you\'re spiraling. We gotchu.',
 		downloadButton: 'Download Your Hero Moment',
 
+		// Share image
+		shareCaption: 'I did the bare minimum today.',
+
 		// Points section
 		pointsLabel: 'Total Hero Points:',
 		pointComments: {
@@ -68,6 +71,11 @@ export const translations = {
 		emergencyButton: "Экстренная Валидация",
 		emergencyTooltip: "Нажимай, если всё летит в спираль. Мы рядом.",
 		downloadButton: "Скачать свой Момент Героизма",
+
+		// Изображение для шеринга (можно выбрать мужской или женский вариант)
+		shareCaption: "Я сделал хотя бы минимум сегодня.",
+		shareCaption_male: "Я сделал хотя бы минимум сегодня.",
+		shareCaption_female: "Я сделала хотя бы минимум сегодня.",
 
 		// Раздел очков
 		pointsLabel: "Всего очков героя:",
