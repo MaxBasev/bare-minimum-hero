@@ -79,6 +79,17 @@ They do nothing. They mean nothing. They just exist to make you smile.
 
 ---
 
+#### `html2canvas.min.js`  
+📸 **Image Generation Magic**  
+Transforms your validation into shareable content.  
+Because if a tree falls in the forest and nobody posts about it, did it even happen?
+
+> Example:  
+> That time you completed 1/10th of your to-do list  
+> But the image makes it look like you conquered the world
+
+---
+
 This app doesn't just store strings.  
 It stores **hope, sarcasm, and deeply personal coping mechanisms.**  
 **Use with caution. Or not. You do you.**
@@ -111,6 +122,22 @@ Examples:
 
 These don't improve your life in any tangible way.  
 But then again, neither does doom-scrolling, and you still do that.
+
+## 📸 Shareable Moments
+
+After you get your daily validation, you can download a beautiful shareable image.
+
+Why? Because sometimes doing just one thing deserves to be commemorated.  
+And if you share it on social media, we get more users. Win-win.
+
+Features:
+- One-click image generation
+- Beautiful quotes on a clean background
+- Easy to download PNG format
+- Perfect for low-key bragging about simply surviving
+
+No one needs to know that all you did was answer one email.  
+Let them think you're thriving.
 
 ## 🔧 Installation
 

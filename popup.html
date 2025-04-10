@@ -34,6 +34,27 @@
 
 		<div id="quote-container" class="hidden">
 			<p id="quote-text"></p>
+			<button id="download-image-btn" class="download-btn">
+				<span class="download-icon">💾</span> Download Your Hero Moment
+			</button>
+		</div>
+
+		<!-- Hidden Image container for html2canvas -->
+		<div id="image-container" class="hidden">
+			<div id="shareable-content">
+				<div class="share-header">
+					<img src="images/icon64.png" alt="Hero Badge" class="share-logo">
+					<div class="share-title">Bare Minimum Hero</div>
+				</div>
+				<div class="share-quote" id="share-quote-box">
+					<p id="share-quote-text"></p>
+				</div>
+				<div class="share-footer">
+					<div class="share-star">⭐</div>
+					<div class="share-caption">I did the bare minimum today.</div>
+					<div class="share-url">bareminimumhero.com</div>
+				</div>
+			</div>
 		</div>
 
 		<div class="hero-points">
@@ -126,6 +147,7 @@
 		</div>
 	</div>
 
+	<script src="html2canvas.min.js"></script>
 	<script type="module" src="popup.js"></script>
 </body>
 

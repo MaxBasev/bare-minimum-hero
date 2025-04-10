@@ -42,6 +42,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 	const mysteryBonusContainer = document.getElementById('mystery-bonus-container');
 	const bonusReward = document.getElementById('bonus-reward');
 
+	// Shareable image elements
+	const downloadImageBtn = document.getElementById('download-image-btn');
+	const shareableContent = document.getElementById('shareable-content');
+	const shareQuoteText = document.getElementById('share-quote-text');
+
 	// Display current date
 	const today = new Date();
 	const options = { weekday: 'long', day: 'numeric', month: 'long' };
@@ -257,6 +262,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 	// Add close handler for About
 	document.querySelector('.about-close')?.addEventListener('click', () => {
 		aboutContainer.classList.add('hidden');
+	});
+
+	// Add click handler for download image button
+	downloadImageBtn?.addEventListener('click', () => {
+		// Copy the quote text to shareable container
+		shareQuoteText.textContent = quoteText.textContent;
+
+		// Create image and download it
+		createShareableImage();
 	});
 
 	// Function to check if streak needs resetting
@@ -584,5 +598,249 @@ document.addEventListener('DOMContentLoaded', async () => {
 		}
 
 		return false;
+	}
+
+	// Function to create and download shareable image
+	function createShareableImage() {
+		// Show loading state
+		downloadImageBtn.disabled = true;
+		downloadImageBtn.textContent = 'Creating image...';
+
+		// We'll use a simpler approach with Canvas API directly
+		const canvas = document.createElement('canvas');
+		const ctx = canvas.getContext('2d');
+
+		// Set canvas size (same as our template)
+		const width = 500;
+		const height = 600;
+		canvas.width = width;
+		canvas.height = height;
+
+		// Create a logo Image object
+		const logo = new Image();
+		logo.crossOrigin = 'anonymous';
+		logo.src = 'images/BMH_Logo_trans.png';
+
+		// Once the image has loaded, we can draw everything
+		logo.onload = () => {
+			try {
+				// Draw background
+				ctx.fillStyle = '#f1ebe1';
+				ctx.fillRect(0, 0, width, height);
+
+				// Draw logo at the top - correctly sized to be fully visible
+				// Calculate the aspect ratio and apply it to keep proportions
+				const logoMaxWidth = 170; // уменьшен по сравнению с оригиналом
+				const logoAspectRatio = logo.width / logo.height;
+				const logoWidth = logoMaxWidth;
+				const logoHeight = logoWidth / logoAspectRatio;
+
+				// Center the logo horizontally at the top of the image
+				const logoX = (width - logoWidth) / 2;
+				const logoY = 40; // достаточный отступ сверху
+				ctx.drawImage(logo, logoX, logoY, logoWidth, logoHeight);
+
+				// Draw quote box
+				const quoteBoxY = logoY + logoHeight + 30;
+				const quoteBoxHeight = 250;
+				ctx.fillStyle = '#ffffff';
+				roundRect(ctx, 40, quoteBoxY, width - 80, quoteBoxHeight, 15, true);
+
+				// Draw quote marks
+				ctx.fillStyle = 'rgba(221, 193, 153, 0.3)';
+				ctx.font = '60px Georgia, serif';
+				ctx.fillText('"', 60, quoteBoxY + 50);
+				ctx.fillText('"', width - 80, quoteBoxY + quoteBoxHeight - 40);
+
+				// Draw the quote text
+				ctx.fillStyle = '#4a4a4a';
+				ctx.font = 'bold 24px Nunito, sans-serif';
+				wrapText(ctx, quoteText.textContent, width / 2, quoteBoxY + 70, width - 150, 30);
+
+				// Position the footer elements
+				const footerStartY = quoteBoxY + quoteBoxHeight + 40;
+				const footerSpacing = 50;
+
+				// Draw caption directly (no star)
+				ctx.fillStyle = '#5d7b93';
+				ctx.font = 'bold 20px Nunito, sans-serif';
+				ctx.textAlign = 'center';
+				ctx.fillText('I did the bare minimum today.', width / 2, footerStartY);
+
+				// Draw URL
+				ctx.fillStyle = '#8597a6';
+				ctx.font = '16px Nunito, sans-serif';
+				ctx.fillText('bareminimumhero.com', width / 2, footerStartY + footerSpacing);
+
+				// Convert to image and download
+				const image = canvas.toDataURL('image/png');
+				const downloadLink = document.createElement('a');
+
+				// Get current date for filename
+				const today = new Date();
+				const dateString = today.toISOString().split('T')[0];
+
+				// Set download attributes
+				downloadLink.href = image;
+				downloadLink.download = `bare-minimum-hero-${dateString}.png`;
+
+				// Add to document, click, and remove
+				document.body.appendChild(downloadLink);
+				downloadLink.click();
+				document.body.removeChild(downloadLink);
+
+				// Reset button
+				downloadImageBtn.disabled = false;
+				downloadImageBtn.innerHTML = '<span class="download-icon">💾</span> Download Your Hero Moment';
+
+				// Create confetti effect for successful download
+				createConfetti(15, false, false);
+			} catch (error) {
+				console.error('Error creating image:', error);
+
+				// Reset button on error
+				downloadImageBtn.disabled = false;
+				downloadImageBtn.innerHTML = '<span class="download-icon">💾</span> Try Again';
+			}
+		};
+
+		// Handle logo loading error
+		logo.onerror = () => {
+			console.error('Error loading logo image');
+
+			// Fallback to the text-only version
+			try {
+				// Draw background
+				ctx.fillStyle = '#f1ebe1';
+				ctx.fillRect(0, 0, width, height);
+
+				// Нарисуем альтернативный логотип и заголовок
+				const logoY = 60;
+
+				// Нарисуем упрощенную иконку
+				const iconSize = 60;
+				ctx.fillStyle = '#5d88a3';
+				roundRect(ctx, (width - iconSize) / 2, logoY, iconSize, iconSize, 10, true, false);
+
+				// Нарисуем стилизованную звезду в иконке
+				ctx.fillStyle = '#e8dfca';
+				ctx.font = '36px Georgia, serif';
+				ctx.textAlign = 'center';
+				ctx.fillText('⭐', width / 2, logoY + 42);
+
+				// Название под иконкой
+				ctx.fillStyle = '#5d7b93';
+				ctx.font = 'bold 30px Nunito, sans-serif';
+				ctx.fillText('Bare Minimum Hero', width / 2, logoY + 90);
+
+				// Draw quote box with adjusted position
+				const quoteBoxY = logoY + 120;
+				const quoteBoxHeight = 250;
+				ctx.fillStyle = '#ffffff';
+				roundRect(ctx, 40, quoteBoxY, width - 80, quoteBoxHeight, 15, true);
+
+				// Draw quote marks
+				ctx.fillStyle = 'rgba(221, 193, 153, 0.3)';
+				ctx.font = '60px Georgia, serif';
+				ctx.fillText('"', 60, quoteBoxY + 50);
+				ctx.fillText('"', width - 80, quoteBoxY + quoteBoxHeight - 40);
+
+				// Draw the quote text
+				ctx.fillStyle = '#4a4a4a';
+				ctx.font = 'bold 24px Nunito, sans-serif';
+				wrapText(ctx, quoteText.textContent, width / 2, quoteBoxY + 70, width - 150, 30);
+
+				// Position the footer elements
+				const footerStartY = quoteBoxY + quoteBoxHeight + 40;
+				const footerSpacing = 50;
+
+				// Draw caption directly (no star)
+				ctx.fillStyle = '#5d7b93';
+				ctx.font = 'bold 20px Nunito, sans-serif';
+				ctx.textAlign = 'center';
+				ctx.fillText('I did the bare minimum today.', width / 2, footerStartY);
+
+				// Draw URL
+				ctx.fillStyle = '#8597a6';
+				ctx.font = '16px Nunito, sans-serif';
+				ctx.fillText('bareminimumhero.com', width / 2, footerStartY + footerSpacing);
+
+				// Convert to image and download
+				const image = canvas.toDataURL('image/png');
+				const downloadLink = document.createElement('a');
+
+				const today = new Date();
+				const dateString = today.toISOString().split('T')[0];
+
+				downloadLink.href = image;
+				downloadLink.download = `bare-minimum-hero-${dateString}.png`;
+
+				document.body.appendChild(downloadLink);
+				downloadLink.click();
+				document.body.removeChild(downloadLink);
+
+				downloadImageBtn.disabled = false;
+				downloadImageBtn.innerHTML = '<span class="download-icon">💾</span> Download Your Hero Moment';
+
+				createConfetti(15, false, false);
+			} catch (error) {
+				console.error('Error creating fallback image:', error);
+
+				downloadImageBtn.disabled = false;
+				downloadImageBtn.innerHTML = '<span class="download-icon">💾</span> Try Again';
+			}
+		};
+	}
+
+	// Helper function to create rounded rectangles on canvas
+	function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+		if (typeof stroke === 'undefined') {
+			stroke = true;
+		}
+		if (typeof radius === 'undefined') {
+			radius = 5;
+		}
+		ctx.beginPath();
+		ctx.moveTo(x + radius, y);
+		ctx.lineTo(x + width - radius, y);
+		ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+		ctx.lineTo(x + width, y + height - radius);
+		ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+		ctx.lineTo(x + radius, y + height);
+		ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+		ctx.lineTo(x, y + radius);
+		ctx.quadraticCurveTo(x, y, x + radius, y);
+		ctx.closePath();
+		if (fill) {
+			ctx.fill();
+		}
+		if (stroke) {
+			ctx.stroke();
+		}
+	}
+
+	// Helper function to wrap text in canvas
+	function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+		ctx.textAlign = 'center';
+		const words = text.split(' ');
+		let line = '';
+		let testLine = '';
+		let lineCount = 0;
+
+		for (let n = 0; n < words.length; n++) {
+			testLine = line + words[n] + ' ';
+			const metrics = ctx.measureText(testLine);
+			const testWidth = metrics.width;
+
+			if (testWidth > maxWidth && n > 0) {
+				ctx.fillText(line, x, y + (lineCount * lineHeight));
+				line = words[n] + ' ';
+				lineCount++;
+			} else {
+				line = testLine;
+			}
+		}
+
+		ctx.fillText(line, x, y + (lineCount * lineHeight));
 	}
 }); 
