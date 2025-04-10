@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Bare Minimum Hero</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<div class="container">
+		<h1 id="date-display">Loading...</h1>
+
+		<div id="question-container">
+			<h2>Did you do the bare minimum today?</h2>
+			<button id="barely-button">Yes. Barely.</button>
+		</div>
+
+		<div id="quote-container" class="hidden">
+			<p id="quote-text"></p>
+		</div>
+
+		<div class="hero-points">
+			<p>Total Hero Points: <span id="points-count">0</span> <span id="point-comment">(starting from zero)</span>
+			</p>
+		</div>
+	</div>
+
+	<script type="module" src="popup.js"></script>
+</body>
+
+</html>
