@@ -16,16 +16,72 @@ A minimalist Chrome extension that lets users mark micro-achievements for the da
 - Daily reminder (which you can ignore)
 - No intrusive gamification or guilt
 
+## 📁 Folder of Feelings — Code Breakdown
+
+We like clean code. Even when everything else is on fire.  
+Here's where the emotional brain of **Bare Minimum Hero** lives:
+
+---
+
+#### `quotes.js`  
+🧠 **Core Quotes for Daily Validation**  
+The heart of the app.  
+This is where your daily "well-done-for-existing" moment gets randomly summoned.
+
+> Example:  
+> "Bare minimum? Bare legend."  
+> "You're not failing — you're surviving with flair."
+
+---
+
+#### `tips.js`  
+💡 **Barely Useful Tips**  
+Things your therapist wouldn't say, but probably should.  
+Perfectly unhelpful. Accidentally brilliant.
+
+> Example:  
+> "Deleting a file = emotional release."  
+> "Lying horizontally still counts as existing."
+
+---
+
+#### `streak-quotes.js`  
+🔥 **Streak Mode Announcements**  
+These quotes kick in when you dare to do the bare minimum **multiple days in a row**.  
+Yes, it's streak-based self-esteem.  
+No, we're not sorry.
+
+> Example:  
+> "🥈 Resilient Waffle unlocked."  
+> "🏆 Burnout? Never Heard Of Her."
+
+---
+
+#### `emergency-quotes.js`  
+🚨 **Emergency Validation Monologues**  
+Long, dramatic, over-the-top praise for when you absolutely need to feel like a legend  
+(because you drank water *and* opened your laptop today).
+
+> Example:  
+> "You didn't break today. That makes you legendary."  
+> "The system was not designed for you to thrive. Yet — you clicked. Heroic."
+
+---
+
+This app doesn't just store strings.  
+It stores **hope, sarcasm, and deeply personal coping mechanisms.**  
+**Use with caution. Or not. You do you.**
+
 ## 🔥 Streak Mode
 
 Every time you show up and click, we remember.  
 Not in a creepy way — in a "we love patterns" way.
 
-- 🧠 3-Day Streak: “Consistently Mediocre”
-- 💪 7-Day Streak: “Resilient Waffle”
-- 🧃 14-Day Streak: “Certified Non-Quitter”
-- ☕️ 30-Day Streak: “Burnout? Never Heard Of Her”
-- 😎 69 Days: “Nice. That’s Commitment.”
+- 🧠 3-Day Streak: "Consistently Mediocre"
+- 💪 7-Day Streak: "Resilient Waffle"
+- 🧃 14-Day Streak: "Certified Non-Quitter"
+- ☕️ 30-Day Streak: "Burnout? Never Heard Of Her"
+- 😎 69 Days: "Nice. That's Commitment."
 
 Streak Mode exists to make you care just enough not to skip tomorrow.
 
