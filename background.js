@@ -1,20 +1,20 @@
-// Устанавливаем будильник при первом запуске
+// Set up an alarm when the extension is first installed
 chrome.runtime.onInstalled.addListener(() => {
-	// Устанавливаем ежедневное напоминание в 19:00
+	// Set up a daily reminder at 7:00 PM
 	chrome.alarms.create('dailyReminder', {
-		periodInMinutes: 24 * 60, // Каждые 24 часа
+		periodInMinutes: 24 * 60, // Every 24 hours
 		when: getNextReminderTime()
 	});
 });
 
-// Обработчик будильника
+// Alarm handler
 chrome.alarms.onAlarm.addListener(async (alarm) => {
 	if (alarm.name === 'dailyReminder') {
-		// Проверяем, нажал ли пользователь кнопку сегодня
+		// Check if the user has clicked the button today
 		const today = new Date().toISOString().split('T')[0];
 		const { lastClickDate } = await chrome.storage.local.get('lastClickDate');
 
-		// Если пользователь еще не нажимал кнопку сегодня, показываем уведомление
+		// If the user hasn't clicked the button today, show a notification
 		if (lastClickDate !== today) {
 			chrome.notifications.create({
 				type: 'basic',
@@ -27,14 +27,14 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 	}
 });
 
-// Получаем время для следующего напоминания (19:00)
+// Get the time for the next reminder (7:00 PM)
 function getNextReminderTime() {
 	const now = new Date();
 	const reminderTime = new Date(now);
 
 	reminderTime.setHours(19, 0, 0, 0);
 
-	// Если сейчас уже позже 19:00, переносим на завтра
+	// If it's already past 7:00 PM, schedule for tomorrow
 	if (now > reminderTime) {
 		reminderTime.setDate(reminderTime.getDate() + 1);
 	}

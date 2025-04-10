@@ -10,11 +10,26 @@
 
 <body>
 	<div class="container">
-		<h1 id="date-display">Loading...</h1>
+		<div class="header">
+			<h1 id="date-display">Loading...</h1>
+			<div class="hero-badge" title="About">
+				<img src="images/icon32.png" alt="Hero Badge" class="hero-icon">
+			</div>
+		</div>
 
 		<div id="question-container">
 			<h2>Did you do the bare minimum today?</h2>
-			<button id="barely-button">Yes. Barely.</button>
+			<button id="barely-button">
+				<span class="button-text">Yes. Barely.</span>
+			</button>
+
+			<div class="emergency-section">
+				<button id="emergency-button" class="emergency-button"
+					title="Use this when you're spiraling. We gotchu.">
+					<span class="sos-icon">🆘</span> Emergency Validation
+				</button>
+				<div class="tooltip">Use this when you're spiraling. We gotchu.</div>
+			</div>
 		</div>
 
 		<div id="quote-container" class="hidden">
@@ -22,8 +37,66 @@
 		</div>
 
 		<div class="hero-points">
-			<p>Total Hero Points: <span id="points-count">0</span> <span id="point-comment">(starting from zero)</span>
-			</p>
+			<div class="points-wrapper">
+				<span class="points-label">Total Hero Points:</span>
+				<span id="points-count">0</span>
+				<span id="point-comment">(starting from zero)</span>
+			</div>
+		</div>
+
+		<!-- Блок с полезными советами -->
+		<div class="barely-useful-tips">
+			<div class="tips-header">
+				<span>Today's Barely Useful Tip:</span>
+				<button id="refresh-tip" title="Get another tip">🔄</button>
+			</div>
+			<p id="tip-text">Loading a useful-ish tip...</p>
+		</div>
+
+		<!-- Добавляем контейнер "About" -->
+		<div id="about-container" class="hidden">
+			<h3>About Bare Minimum Hero</h3>
+
+			<div class="about-quote">
+				<p>This is not a productivity app.<br>
+					This is emotional first aid.<br>
+					For the days when you show up, do one thing, and don't spontaneously combust — we're here to
+					say:<br>
+					<strong>well done, legend.</strong>
+				</p>
+			</div>
+
+			<p>Bare Minimum Hero gives you a single daily button to press when you do <em>literally anything at
+					all</em>.</p>
+			<p>You get one point. One sarcastic compliment.<br>
+				And a little more belief in yourself than you had 10 seconds ago.</p>
+
+			<p class="about-minimal">No charts.<br>
+				No KPIs.<br>
+				No guilt.</p>
+
+			<p>Just the quiet satisfaction of still existing — with style.</p>
+
+			<div class="about-tldr">
+				<h4>🔮 TL;DR:</h4>
+				<p>You're tired, not lazy.<br>
+					You're surviving, and that counts.<br>
+					You clicked. You win.</p>
+			</div>
+
+			<div class="about-close">Got it, champ</div>
+		</div>
+	</div>
+
+	<!-- Emergency container moved outside .container for better fullscreen display -->
+	<div id="emergency-container" class="hidden">
+		<div class="emergency-content">
+			<div class="emergency-star">⭐</div>
+			<div id="emergency-text" class="emergency-text"></div>
+			<div class="emergency-achievement">
+				<span id="achievement-text">✨ Emergency Mode Unlocked: The Spiral Is Real</span>
+			</div>
+			<div class="close-emergency">Tap anywhere to close</div>
 		</div>
 	</div>
 
