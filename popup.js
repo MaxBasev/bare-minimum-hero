@@ -1,17 +1,24 @@
-import quotes from './quotes.js';
+import quotes, { russianQuotes } from './quotes.js';
 import {
 	emergencyTexts,
-	emergencyAchievements
+	emergencyAchievements,
+	russianEmergencyTexts,
+	russianEmergencyAchievements
 } from './emergency-quotes.js';
 import {
-	barelyUsefulTips
+	barelyUsefulTips,
+	russianTips
 } from './tips.js';
 import {
 	streakAchievements,
 	streakMessages,
-	streakRecoveryMessages
+	streakRecoveryMessages,
+	russianStreakAchievements,
+	russianStreakMessages,
+	russianStreakRecoveryMessages
 } from './streak-quotes.js';
-import { mysteryBonuses } from './mystery-bonus.js';
+import { mysteryBonuses, russianMysteryBonuses } from './mystery-bonus.js';
+import { translations, formatDate, formatNextAvailableDate } from './translations.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
 	// Get DOM elements
@@ -47,10 +54,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 	const shareableContent = document.getElementById('shareable-content');
 	const shareQuoteText = document.getElementById('share-quote-text');
 
+	// Language selector elements
+	const languageSelect = document.getElementById('language-select');
+	const languageLabel = document.getElementById('language-label');
+
 	// Display current date
 	const today = new Date();
-	const options = { weekday: 'long', day: 'numeric', month: 'long' };
-	dateDisplay.textContent = today.toLocaleDateString('en-US', options);
 
 	// Format date for comparison
 	const dateString = today.toISOString().split('T')[0];
@@ -67,7 +76,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 		highestStreak = 0,
 		lastAchievement = '',
 		streakBroken = false,
-		lastBonusDate = ''
+		lastBonusDate = '',
+		userLanguage = 'en'
 	} = await chrome.storage.local.get([
 		'lastClickDate',
 		'heroPoints',
@@ -79,8 +89,85 @@ document.addEventListener('DOMContentLoaded', async () => {
 		'highestStreak',
 		'lastAchievement',
 		'streakBroken',
-		'lastBonusDate'
+		'lastBonusDate',
+		'userLanguage'
 	]);
+
+	// Set initial language from storage
+	languageSelect.value = userLanguage;
+
+	// Get translations for current language
+	let currentLang = userLanguage;
+	let t = translations[currentLang];
+
+	// Update UI with current language
+	updateUILanguage();
+
+	// Language change handler
+	languageSelect.addEventListener('change', async () => {
+		currentLang = languageSelect.value;
+		t = translations[currentLang];
+
+		// Save language preference
+		await chrome.storage.local.set({ userLanguage: currentLang });
+
+		// Update UI with new language
+		updateUILanguage();
+
+		// Refresh tip with new language
+		displayRandomTip(getRandomTipIndex());
+	});
+
+	// Function to update UI with selected language
+	function updateUILanguage() {
+		// Update date display
+		dateDisplay.textContent = formatDate(today, currentLang);
+
+		// Update static text elements
+		languageLabel.textContent = t.languageLabel;
+		document.querySelector('#question-container h2').textContent = t.title;
+		document.querySelector('.button-text').textContent = t.mainButton;
+		emergencyButton.innerHTML = `<span class="sos-icon">🆘</span> ${t.emergencyButton}`;
+		document.querySelector('.tooltip').textContent = t.emergencyTooltip;
+		downloadImageBtn.innerHTML = `<span class="download-icon">💾</span> ${t.downloadButton}`;
+
+		// Points section
+		document.querySelector('.points-label').textContent = t.pointsLabel;
+		updatePointComment(heroPoints);
+
+		// Streak section
+		document.querySelector('.streak-label').textContent = t.streakLabel;
+		streakDays.textContent = currentStreak === 1 ? t.day : t.days;
+
+		// Tips section
+		document.querySelector('.tips-header span').textContent = t.tipsHeader;
+		refreshTip.title = t.refreshTip;
+
+		// About section
+		document.querySelector('#about-container h3').textContent = t.aboutTitle;
+		document.querySelector('.about-quote p').innerHTML = t.aboutQuote;
+		document.querySelector('#about-container p:nth-of-type(1)').innerHTML = t.aboutP1;
+		document.querySelector('#about-container p:nth-of-type(2)').innerHTML = t.aboutP2;
+		document.querySelector('.about-minimal').innerHTML = t.aboutMinimal;
+		document.querySelector('#about-container p:nth-of-type(3)').innerHTML = t.aboutP3;
+		document.querySelector('.about-tldr h4').innerHTML = t.aboutTLDR;
+		document.querySelector('.about-tldr p').innerHTML = t.aboutTLDRText;
+		document.querySelector('.about-close').textContent = t.aboutClose;
+
+		// Emergency mode
+		achievementText.textContent = t.achievementText;
+		document.querySelector('.close-emergency').textContent = t.closeEmergency;
+
+		// Update streak display
+		updateStreakDisplay(currentStreak);
+
+		// Check if streak is in recovery mode
+		if (streakBroken) {
+			displayStreakRecoveryMessage();
+		} else {
+			displayRandomStreakMessage(currentStreak);
+		}
+	}
 
 	// Update points counter
 	pointsCount.textContent = heroPoints;
@@ -140,7 +227,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 			newStreak = currentStreak + 1;
 
 			// Check if a new achievement was reached
-			for (const achievement of streakAchievements) {
+			const achievements = currentLang === 'ru' ? russianStreakAchievements : streakAchievements;
+			for (const achievement of achievements) {
 				if (newStreak === achievement.days) {
 					streakAchieved = true;
 					achievementUnlocked = achievement;
@@ -155,8 +243,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 		// Update highest streak if needed
 		const newHighestStreak = Math.max(highestStreak, newStreak);
 
-		// Get random quote
-		const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+		// Get random quote based on language
+		const quotesArray = currentLang === 'ru' ? russianQuotes : quotes;
+		const randomQuote = quotesArray[Math.floor(Math.random() * quotesArray.length)];
 
 		// Add click animation
 		barelyButton.classList.add('clicked');
@@ -211,13 +300,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 	// Emergency button click handler
 	emergencyButton.addEventListener('click', async () => {
+		// Get appropriate emergency texts based on language
+		const emTexts = currentLang === 'ru' ? russianEmergencyTexts : emergencyTexts;
+		const emAchievements = currentLang === 'ru' ? russianEmergencyAchievements : emergencyAchievements;
+
 		// Get random emergency text and achievement
-		const randomEmergencyText = emergencyTexts[Math.floor(Math.random() * emergencyTexts.length)];
-		const randomAchievement = emergencyAchievements[Math.floor(Math.random() * emergencyAchievements.length)];
+		const randomEmergencyText = emTexts[Math.floor(Math.random() * emTexts.length)];
+		const randomAchievement = emAchievements[Math.floor(Math.random() * emAchievements.length)];
 
 		// Reset emergency text container
 		emergencyText.innerHTML = '';
-		achievementText.textContent = randomAchievement;
+		achievementText.textContent = t.achievementText;
 
 		// Create larger confetti effect
 		createConfetti(60, true);
@@ -236,8 +329,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 		// Disable emergency button
 		emergencyButton.disabled = true;
-		// Добавляем span для иконки и укорачиваем текст
-		emergencyButton.innerHTML = `<span class="sos-icon">🆘</span> ${getNextAvailableDate(today)}`;
+		emergencyButton.innerHTML = `<span class="sos-icon">🆘</span> ${formatNextAvailableDate(getNextAvailableDate(today), currentLang)}`;
 	});
 
 	// Back to normal button setup
@@ -345,15 +437,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 			return;
 		}
 
-		const randomMessage = streakMessages[Math.floor(Math.random() * streakMessages.length)];
+		const messages = currentLang === 'ru' ? russianStreakMessages : streakMessages;
+		const randomMessage = messages[Math.floor(Math.random() * messages.length)];
 		streakMessage.textContent = randomMessage;
 	}
 
 	// Display streak recovery message
 	function displayStreakRecoveryMessage() {
-		const randomMessage = streakRecoveryMessages[Math.floor(Math.random() * streakRecoveryMessages.length)];
+		const messages = currentLang === 'ru' ? russianStreakRecoveryMessages : streakRecoveryMessages;
+		const randomMessage = messages[Math.floor(Math.random() * messages.length)];
 		streakMessage.textContent = randomMessage;
-		streakMessage.innerHTML += `<br><button id="reset-streak-btn">Reset Streak With Dignity 🧹</button>`;
+		streakMessage.innerHTML += `<br><button id="reset-streak-btn">${t.resetStreak}</button>`;
 
 		// Add reset button handler
 		document.getElementById('reset-streak-btn')?.addEventListener('click', async () => {
@@ -373,22 +467,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 	function updateStreakDisplay(streak) {
 		// Update streak counter
 		streakCount.textContent = streak;
-		streakDays.textContent = streak === 1 ? 'day' : 'days';
+		streakDays.textContent = streak === 1 ? t.day : t.days;
+
+		// Use appropriate achievement set based on language
+		const achievements = currentLang === 'ru' ? russianStreakAchievements : streakAchievements;
 
 		// Find current achievement
 		let currentAch = null;
-		for (let i = streakAchievements.length - 1; i >= 0; i--) {
-			if (streak >= streakAchievements[i].days) {
-				currentAch = streakAchievements[i];
+		for (let i = achievements.length - 1; i >= 0; i--) {
+			if (streak >= achievements[i].days) {
+				currentAch = achievements[i];
 				break;
 			}
 		}
 
 		// Find next achievement
 		let nextAch = null;
-		for (let i = 0; i < streakAchievements.length; i++) {
-			if (streak < streakAchievements[i].days) {
-				nextAch = streakAchievements[i];
+		for (let i = 0; i < achievements.length; i++) {
+			if (streak < achievements[i].days) {
+				nextAch = achievements[i];
 				break;
 			}
 		}
@@ -402,29 +499,31 @@ document.addEventListener('DOMContentLoaded', async () => {
 		}
 
 		if (nextAch) {
-			nextAchievement.textContent = `Next: ${nextAch.label} at ${nextAch.days} days`;
+			nextAchievement.textContent = t.nextAchievement
+				.replace('{label}', nextAch.label)
+				.replace('{days}', nextAch.days);
 			nextAchievement.classList.remove('hidden');
 		} else {
-			nextAchievement.textContent = `You've reached all achievements!`;
+			nextAchievement.textContent = t.allAchievements;
 		}
 	}
 
-	// Function to update points comment
+	// Update point comment based on points
 	function updatePointComment(points) {
 		if (points === 0) {
-			pointComment.textContent = '(starting from zero)';
+			pointComment.textContent = t.pointComments.zero;
 		} else if (points <= 3) {
-			pointComment.textContent = '(it\'s a start)';
+			pointComment.textContent = t.pointComments.low;
 		} else if (points <= 6) {
-			pointComment.textContent = '(you\'re on a roll-ish)';
+			pointComment.textContent = t.pointComments.medium;
 		} else if (points <= 10) {
-			pointComment.textContent = '(okay wow look at you go)';
+			pointComment.textContent = t.pointComments.high;
 		} else if (points <= 20) {
-			pointComment.textContent = '(impressive consistency!)';
+			pointComment.textContent = t.pointComments.veryHigh;
 		} else if (points <= 50) {
-			pointComment.textContent = '(unofficial productivity guru)';
+			pointComment.textContent = t.pointComments.superHigh;
 		} else {
-			pointComment.textContent = '(legendary minimum achiever)';
+			pointComment.textContent = t.pointComments.legendary;
 		}
 	}
 
@@ -504,20 +603,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 			// Not available yet
 			emergencyButton.disabled = true;
 			// Добавляем span для иконки SOS и укорачиваем текст
-			emergencyButton.innerHTML = `<span class="sos-icon">🆘</span> ${getNextAvailableDate(nextAvailableDate)}`;
+			emergencyButton.innerHTML = `<span class="sos-icon">🆘</span> ${formatNextAvailableDate(nextAvailableDate, currentLang)}`;
 		}
-	}
-
-	// Format next available date
-	function getNextAvailableDate(date) {
-		if (typeof date === 'string') {
-			date = new Date(date);
-		}
-
-		const nextDate = new Date(date);
-		nextDate.setDate(nextDate.getDate() + 7);
-
-		return `Until ${nextDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
 	}
 
 	// Animate emergency text appearance
@@ -531,20 +618,27 @@ document.addEventListener('DOMContentLoaded', async () => {
 	}
 
 	// Display a random tip
-	function displayRandomTip(index) {
-		if (index === -1) {
-			index = getRandomTipIndex();
-		}
-		tipText.textContent = barelyUsefulTips[index];
-		chrome.storage.local.set({ lastTipIndex: index });
+	function displayRandomTip(lastIndex = -1) {
+		// Get tips based on current language
+		const tips = currentLang === 'ru' ? russianTips : barelyUsefulTips;
+
+		// Get a new random index different from the last one
+		const newIndex = getRandomTipIndex(lastIndex, tips.length);
+
+		// Display the tip
+		tipText.textContent = tips[newIndex];
+
+		// Save the index for next time
+		chrome.storage.local.set({ lastTipIndex: newIndex });
 	}
 
-	// Get a random tip index
-	function getRandomTipIndex() {
+	// Function to get a random tip index different from the last one
+	function getRandomTipIndex(lastIndex = -1, tipsLength = barelyUsefulTips.length) {
 		let newIndex;
 		do {
-			newIndex = Math.floor(Math.random() * barelyUsefulTips.length);
-		} while (newIndex === lastTipIndex && barelyUsefulTips.length > 1);
+			newIndex = Math.floor(Math.random() * tipsLength);
+		} while (newIndex === lastIndex && tipsLength > 1);
+
 		return newIndex;
 	}
 
@@ -570,7 +664,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 			const roll = Math.random();
 			if (roll <= bonusChance) {
 				// Got a bonus!
-				const randomBonus = mysteryBonuses[Math.floor(Math.random() * mysteryBonuses.length)];
+				const bonusArray = currentLang === 'ru' ? russianMysteryBonuses : mysteryBonuses;
+				const randomBonus = bonusArray[Math.floor(Math.random() * bonusArray.length)];
 
 				// Update the bonus display
 				bonusReward.textContent = `Reward: ${randomBonus}`;
@@ -842,5 +937,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 		}
 
 		ctx.fillText(line, x, y + (lineCount * lineHeight));
+	}
+
+	// Get next available date for emergency button
+	function getNextAvailableDate(date) {
+		const nextDate = new Date(date);
+		nextDate.setDate(nextDate.getDate() + 1);
+		return nextDate;
 	}
 }); 
