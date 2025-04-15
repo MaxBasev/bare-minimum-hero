@@ -210,7 +210,7 @@ Every day.
 
 ## 📦 Install Instructions
 
-Coming soon to [Chrome Web Store]()  
+[Chrome Web Store](https://chromewebstore.google.com/detail/kgfbfabodbchkinlehamabjkknenhpdb?utm_source=item-share-cb)  
 Or clone & load as an unpacked extension via `chrome://extensions`
 
 ---
