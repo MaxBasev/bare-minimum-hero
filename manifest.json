@@ -1,7 +1,7 @@
 {
 	"manifest_version": 3,
 	"name": "Bare Minimum Hero",
-	"version": "0.1",
+	"version": "1.0.0",
 	"description": "Celebrate your smallest achievements. You did the bare minimum? That counts!",
 	"action": {
 		"default_popup": "popup.html",

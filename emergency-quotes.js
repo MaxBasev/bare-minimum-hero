@@ -119,6 +119,42 @@ export const emergencyTexts = [
 			"That was the patch note.",
 			"You're the update."
 		]
+	},
+	{
+		title: "The Survivor",
+		lines: [
+			"You are currently operating on 2% battery.",
+			"And yet, here you are.",
+			"Still functioning.",
+			"Still pushing back against the void.",
+			"That's not just surviving.",
+			"That's an incredible display of stubbornness.",
+			"We applaud it."
+		]
+	},
+	{
+		title: "Quiet Rebellion",
+		lines: [
+			"They want you to be a machine.",
+			"Optimized. Efficient. Relentless.",
+			"But you are wonderfully human.",
+			"Flawed, tired, and deeply over it.",
+			"Clicking this button is your protest.",
+			"A quiet rebellion against the cult of busy.",
+			"Stay gloriously imperfect."
+		]
+	},
+	{
+		title: "Emotional Load-Bearing Wall",
+		lines: [
+			"You've been holding it all together so long.",
+			"It's okay if today you're just... existing.",
+			"You don't have to carry the world today.",
+			"Let the world carry itself for a minute.",
+			"Just breathe.",
+			"Just be.",
+			"And accept this validation."
+		]
 	}
 ];
 
@@ -133,7 +169,12 @@ export const emergencyAchievements = [
 	"🛡️ Activated: Maximum Validation Shield Deployed",
 	"🦝 Honorary Title: Commander of Controlled Chaos",
 	"🌟 You Showed Up: The Universe Took Notes",
-	"🎭 New Role: Master of Pretending Things Are Fine (and Pulling It Off)"
+	"🎭 New Role: Master of Pretending Things Are Fine (and Pulling It Off)",
+	"🔋 Battery Level: 1%, but Proceeding Anyway",
+	"🌪️ Achievement: Embraced the Chaos and Didn't Flinch",
+	"🧗 Badge: Scaling the Mountain of 'Doing the Bare Minimum'",
+	"🥇 Medal of Honor: Surviving a Tuesday That Felt Like a Monday",
+	"🚀 Status: Orbiting Above the Mess Down Here"
 ];
 
 // Russian emergency validation texts
@@ -257,6 +298,42 @@ export const russianEmergencyTexts = [
 			"Это была версия 2.0.",
 			"Ты — апдейт."
 		]
+	},
+	{
+		title: "Выживший",
+		lines: [
+			"Ты сейчас работаешь на 2% заряда.",
+			"И всё же, ты здесь.",
+			"Всё ещё функционируешь.",
+			"Всё ещё сопротивляешься цифровой пустоте.",
+			"Это не просто выживание.",
+			"Это невероятное проявление упрямства.",
+			"Мы аплодируем стоя."
+		]
+	},
+	{
+		title: "Тихий Бунт",
+		lines: [
+			"От тебя ждут, что ты буде阴 роботом.",
+			"Оптимизированным. Эффективным. Неутомимым.",
+			"Но ты восхитительно человечен.",
+			"Несовершенен, уставший и сыт всем этим по горло.",
+			"Клик по этой кнопке — твой протест.",
+			"Тихий бунт против культа вечной занятости.",
+			"Оставайся прекрасно неидеальным."
+		]
+	},
+	{
+		title: "Эмоциональная Несущая Стена",
+		lines: [
+			"Ты так долго держал всё на себе.",
+			"Ничего страшного, если сегодня ты просто... существуешь.",
+			"Тебе не нужно тащить весь мир сегодня.",
+			"Пусть мир сам себя потаскает минутку.",
+			"Просто дыши.",
+			"Просто будь.",
+			"И прими эту валидацию."
+		]
 	}
 ];
 
@@ -271,5 +348,10 @@ export const russianEmergencyAchievements = [
 	"🛡️ Активировано: Щит максимальной валидации включён",
 	"🦝 Почётное звание: Командир Контролируемого Хаоса",
 	"🌟 Ты появился: Вселенная это записала",
-	"🎭 Новая роль: Мастер 'я в порядке', и это почти убедительно"
+	"🎭 Новая роль: Мастер 'я в порядке', и это почти убедительно",
+	"🔋 Заряд батареи: 1%, Но Полёт Нормальный",
+	"🌪️ Достижение: Принял Хаос И Не Моргнул Глазом",
+	"🧗 Значок: Покоритель Эвереста 'Я Сделал Хоть Что-то'",
+	"🥇 Медаль Отваги: Пережил Вторник, Который Выглядел Как Понедельник",
+	"🚀 Статус: Парю Над Этим Всем Беспорядком На Орбите"
 ]; 

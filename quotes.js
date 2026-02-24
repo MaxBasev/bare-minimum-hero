@@ -28,7 +28,26 @@ const quotes = [
 	"You clicked. Now go lie down. You earned it.",
 	"No pressure, but you're crushing the low bar.",
 	"Everyone starts somewhere. You started today. Again.",
-	"Remember: 'Done' is sexier than 'perfect'. You win."
+	"Remember: 'Done' is sexier than 'perfect'. You win.",
+	"You opened your laptop. That's a marathon right there.",
+	"You successfully converted oxygen into carbon dioxide today. Solid work.",
+	"Is it productivity? Or just well-disguised panic? Doesn't matter, you clicked.",
+	"You did the thing. Now quickly hide before someone asks for another thing.",
+	"100% effort is a myth. You gave a solid 4% and it shows.",
+	"Your ancestors survived sabertooth tigers so you could click this. Proud.",
+	"You're not procrastinating, you're just aggressively waiting.",
+	"I've seen worse. Usually in a mirror. You're doing okay.",
+	"Today's level of effort: Wi-Fi on 1 bar. It still connects.",
+	"Excellence is a habit, but so is doing the bare minimum. You chose wisely.",
+	"Look at you, contributing to society (technically).",
+	"You crossed one item off a list of 400. Let's focus on that one item.",
+	"Doing nothing is hard, you never know when you're done. But you did *something*!",
+	"You're the human equivalent of an 'I voted' sticker.",
+	"You tried. And if you didn't, you clicked 'Yes' anyway. Icon behavior.",
+	"You are legally recognized as a functioning adult today.",
+	"Your brain wants a break. Your inbox wants your soul. You chose the button.",
+	"You survived another meeting that could have been an email. Valiant.",
+	"Look, someone out there is proud of you. Probably this extension."
 ];
 
 // Russian quotes
@@ -62,7 +81,26 @@ export const russianQuotes = [
 	"Ты кликнул. Теперь иди полежи. Заслуженно.",
 	"Без давления, но ты разнёс нижнюю границу.",
 	"Все с чего-то начинают. Ты начал сегодня. Опять.",
-	"'Сделано' — сексуальнее, чем 'идеально'. Ты победил."
+	"'Сделано' — сексуальнее, чем 'идеально'. Ты победил.",
+	"Ты открыл ноутбук. Это уже марафон, если подумать.",
+	"Ты успешно конвертировал кислород в углекислый газ. Отличная работа.",
+	"Это продуктивность или просто замаскированная паника? Неважно, ты кликнул.",
+	"Ты сделал дело. Теперь прячься, пока кто-нибудь не попросил сделать еще одно.",
+	"Выкладываться на 100% — это миф. Ты выдал твердые 4%, и это видно.",
+	"Твои предки выживали среди саблезубых тигров ради этого клика. Гордимся.",
+	"Ты не прокрастинируешь, ты агрессивно выжидаешь.",
+	"Я видел вещи и похуже. Обычно в зеркале. А ты молодец.",
+	"Уровень усилий сегодня: Wi-Fi на одной палочке. Но ведь грузит!",
+	"Превосходство — это привычка. Но и минимум тоже. Ты выбрал мудро.",
+	"Посмотри на себя, вносишь вклад в общество (чисто технически).",
+	"Ты вычеркнул один пункт из 400. Давай сфокусируемся именно на нём.",
+	"Ничего не делать сложно, никогда не знаешь, когда закончил. Но ты сделал *что-то*!",
+	"Ты — человеческий эквивалент наклейки 'Я проголосовал'.",
+	"Ты попытался. А если нет — всё равно нажал 'Да'. Легендарное поведение.",
+	"Сегодня ты юридически признан функционирующим взрослым.",
+	"Мозг хочет отдохнуть. Входящие хотят твою душу. А ты выбрал кнопку.",
+	"Ты пережил еще один созвон, который мог бы быть письмом. Героически.",
+	"Слушай, кто-то где-то точно тобой гордится. Скорее всего, это расширение."
 ];
 
 export default quotes; 

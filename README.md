@@ -210,7 +210,7 @@ Every day.
 
 ## 📦 Install Instructions
 
-[Chrome Web Store](https://chromewebstore.google.com/detail/kgfbfabodbchkinlehamabjkknenhpdb?utm_source=item-share-cb)  
+[Chrome Web Store](https://bareminimumhero.m-b.app/)  
 Or clone & load as an unpacked extension via `chrome://extensions`
 
 ---

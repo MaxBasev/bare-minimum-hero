@@ -48,6 +48,14 @@ export const translations = {
 		aboutP3: 'Just the quiet satisfaction of still existing — with style.',
 		aboutTLDR: '🔮 TL;DR:',
 		aboutTLDRText: 'You\'re tired, not lazy.<br>You\'re surviving, and that counts.<br>You clicked. You win.',
+
+		// About links
+		linkStore: 'Chrome Web Store',
+		linkSupport: 'Support',
+		linkWebsite: 'Website',
+		linkTwitter: 'Twitter',
+		linkGithub: 'GitHub',
+
 		aboutClose: 'Got it, champ',
 
 		// Emergency mode
@@ -113,6 +121,14 @@ export const translations = {
 		aboutP3: "Только тихое удовлетворение от того, что ты всё ещё есть — и делаешь это стильно.",
 		aboutTLDR: "🔮 Если кратко:",
 		aboutTLDRText: "Ты не ленивый, ты уставший.<br>Ты выживаешь — и это считается.<br>Ты кликнул. Ты победил.",
+
+		// About links
+		linkStore: 'Chrome Web Store',
+		linkSupport: 'Поддержать',
+		linkWebsite: 'Сайт',
+		linkTwitter: 'Twitter',
+		linkGithub: 'GitHub',
+
 		aboutClose: "Понял, чемпион",
 
 		// Экстренный режим

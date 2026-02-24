@@ -1,23 +1,43 @@
-// Set up an alarm when the extension is first installed
-chrome.runtime.onInstalled.addListener(() => {
-	// Set up a daily reminder at 7:00 PM
-	chrome.alarms.create('dailyReminder', {
-		periodInMinutes: 24 * 60, // Every 24 hours
-		when: getNextReminderTime()
-	});
+// Function to ensure alarms are created
+async function setupAlarms() {
+	const reminderAlarm = await chrome.alarms.get('dailyReminder');
+	if (!reminderAlarm) {
+		chrome.alarms.create('dailyReminder', {
+			periodInMinutes: 24 * 60, // Every 24 hours
+			when: getNextReminderTime()
+		});
+	}
 
-	// Also set up a daily streak check
-	chrome.alarms.create('streakCheck', {
-		periodInMinutes: 24 * 60, // Every 24 hours
-		when: getStreakCheckTime()
-	});
+	const streakAlarm = await chrome.alarms.get('streakCheck');
+	if (!streakAlarm) {
+		chrome.alarms.create('streakCheck', {
+			periodInMinutes: 24 * 60, // Every 24 hours
+			when: getStreakCheckTime()
+		});
+	}
+}
+
+// Set up alarms when the extension is first installed
+chrome.runtime.onInstalled.addListener(() => {
+	setupAlarms();
 });
+
+// Ensure alarms exist when Chrome starts (fallback)
+chrome.runtime.onStartup.addListener(() => {
+	setupAlarms();
+});
+
+// Helper to get local date string YYYY-MM-DD
+function getLocalDateString(date = new Date()) {
+	const offset = date.getTimezoneOffset() * 60000;
+	return new Date(date.getTime() - offset).toISOString().split('T')[0];
+}
 
 // Alarm handler
 chrome.alarms.onAlarm.addListener(async (alarm) => {
 	if (alarm.name === 'dailyReminder') {
 		// Check if the user has clicked the button today
-		const today = new Date().toISOString().split('T')[0];
+		const today = getLocalDateString();
 		const { lastClickDate } = await chrome.storage.local.get('lastClickDate');
 
 		// If the user hasn't clicked the button today, show a notification
@@ -74,12 +94,12 @@ async function checkStreakStatus() {
 
 	// Get today's date
 	const today = new Date();
-	const dateString = today.toISOString().split('T')[0];
+	const dateString = getLocalDateString(today);
 
 	// Get yesterday's date
 	const yesterday = new Date(today);
 	yesterday.setDate(yesterday.getDate() - 1);
-	const yesterdayString = yesterday.toISOString().split('T')[0];
+	const yesterdayString = getLocalDateString(yesterday);
 
 	// If last click wasn't today or yesterday, mark streak as broken
 	if (lastClickDate !== dateString && lastClickDate !== yesterdayString) {

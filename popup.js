@@ -20,6 +20,12 @@ import {
 import { mysteryBonuses, russianMysteryBonuses } from './mystery-bonus.js';
 import { translations, formatDate, formatNextAvailableDate } from './translations.js';
 
+// Helper to get local date string YYYY-MM-DD
+function getLocalDateString(date = new Date()) {
+	const offset = date.getTimezoneOffset() * 60000;
+	return new Date(date.getTime() - offset).toISOString().split('T')[0];
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
 	// Get DOM elements
 	const dateDisplay = document.getElementById('date-display');
@@ -62,7 +68,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 	const today = new Date();
 
 	// Format date for comparison
-	const dateString = today.toISOString().split('T')[0];
+	const dateString = getLocalDateString(today);
 
 	// Load data from local storage
 	const {
@@ -152,6 +158,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 		document.querySelector('#about-container p:nth-of-type(3)').innerHTML = t.aboutP3;
 		document.querySelector('.about-tldr h4').innerHTML = t.aboutTLDR;
 		document.querySelector('.about-tldr p').innerHTML = t.aboutTLDRText;
+
+		// About links
+		const textStore = document.getElementById('text-store');
+		if (textStore) textStore.textContent = t.linkStore;
+		const textSupport = document.getElementById('text-support');
+		if (textSupport) textSupport.textContent = t.linkSupport;
+		const textWebsite = document.getElementById('text-website');
+		if (textWebsite) textWebsite.textContent = t.linkWebsite;
+		const textTwitter = document.getElementById('text-twitter');
+		if (textTwitter) textTwitter.textContent = t.linkTwitter;
+		const textGithub = document.getElementById('text-github');
+		if (textGithub) textGithub.textContent = t.linkGithub;
+
 		document.querySelector('.about-close').textContent = t.aboutClose;
 
 		// Emergency mode
@@ -220,7 +239,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 		// Check if there was a streak break (more than 1 day passed since last click)
 		const yesterday = new Date(today);
 		yesterday.setDate(yesterday.getDate() - 1);
-		const yesterdayString = yesterday.toISOString().split('T')[0];
+		const yesterdayString = getLocalDateString(yesterday);
 
 		if (!lastClickDate || lastClickDate === yesterdayString) {
 			// Continuing or starting a streak
@@ -324,7 +343,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 		// Save last emergency date
 		const today = new Date();
 		await chrome.storage.local.set({
-			lastEmergencyDate: today.toISOString().split('T')[0]
+			lastEmergencyDate: getLocalDateString(today)
 		});
 
 		// Disable emergency button
@@ -685,7 +704,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 				// Save the date of this bonus
 				chrome.storage.local.set({
-					lastBonusDate: new Date().toISOString().split('T')[0]
+					lastBonusDate: getLocalDateString()
 				});
 
 				return true;
@@ -768,7 +787,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 				// Draw URL
 				ctx.fillStyle = '#8597a6';
 				ctx.font = '16px Nunito, sans-serif';
-				ctx.fillText('bareminimumhero.com', width / 2, footerStartY + footerSpacing);
+				ctx.fillText('bareminimumhero.m-b.app', width / 2, footerStartY + footerSpacing);
 
 				// Convert to image and download
 				const image = canvas.toDataURL('image/png');
@@ -776,7 +795,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 				// Get current date for filename
 				const today = new Date();
-				const dateString = today.toISOString().split('T')[0];
+				const dateString = getLocalDateString(today);
 
 				// Set download attributes
 				downloadLink.href = image;
@@ -864,14 +883,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 				// Draw URL
 				ctx.fillStyle = '#8597a6';
 				ctx.font = '16px Nunito, sans-serif';
-				ctx.fillText('bareminimumhero.com', width / 2, footerStartY + footerSpacing);
+				ctx.fillText('bareminimumhero.m-b.app', width / 2, footerStartY + footerSpacing);
 
 				// Convert to image and download
 				const image = canvas.toDataURL('image/png');
 				const downloadLink = document.createElement('a');
 
 				const today = new Date();
-				const dateString = today.toISOString().split('T')[0];
+				const dateString = getLocalDateString(today);
 
 				downloadLink.href = image;
 				downloadLink.download = `bare-minimum-hero-${dateString}.png`;
